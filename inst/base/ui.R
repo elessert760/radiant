@@ -6,7 +6,7 @@ help_menu <-
       tabPanel("About", uiOutput("help_about"), icon = icon("info")),
       tabPanel(tags$a("", href = "http://vnijs.github.io/radiant/", target = "_blank",
                list(icon("globe"), "Radiant docs"))),
-      tabPanel(tags$a("", href = "https://github.com/vnijs/radiant/issues", target = "_blank",
+      tabPanel(tags$a("", href = "https://github.com/elessert/radiant/issues", target = "_blank",
                list(icon("github"), "Report issue")))
     ),
     js_head
@@ -14,5 +14,5 @@ help_menu <-
 
 ## ui for base radiant
 shinyUI(
-  do.call(navbarPage, c("Radiant", nav_ui, shared_ui, help_menu))
+  do.call(navbarPage, c("Data Center", nav_ui, shared_ui, help_menu))
 )
