@@ -4,7 +4,7 @@ help_menu <-
       tabPanel("Help", uiOutput("help_base"), icon = icon("question")),
       tabPanel("Videos", uiOutput("help_videos"), icon = icon("film")),
       tabPanel("About", uiOutput("help_about"), icon = icon("info")),
-      tabPanel(tags$a("", href = "https://github.com/elessert/radiant/issues", target = "_blank",
+      tabPanel(tags$a("", href = "https://github.com/elessert760/radiant/issues", target = "_blank",
                list(icon("github"), "Report issue")))
     ),
     js_head
