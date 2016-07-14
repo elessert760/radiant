@@ -52,6 +52,30 @@ normalize <- function(x,y) {
 as_mdy <- function(x) { if (is.factor(x)) as.character(x) else x } %>%
             {sshhr( mdy(.) )} %>% as.Date
 
+
+
+#' split multiple emails within the same cell
+#' @param x input column
+#' @export
+
+split_cell <- function(x) {
+x %<>%
+  mutate(x = gsub("@ ", "@", x = x)) %>%
+  mutate(x = gsub("'", "", x = x)) %>%
+  mutate(x = gsub("\\?|>)", ",", x = x)) %>%
+  mutate(x = gsub("|", ",", x = x, fixed = T)) %>% 
+  mutate(x = gsub(" com", "com", x = x)) %>%
+  mutate(x = gsub(",com", ".com", x = x)) %>%
+  mutate(x = trimws(x)) %>%
+  mutate(x = strsplit(as.character(x),
+                                ",|;|:|<|\\(")) %>%
+  unnest(x) %>%
+  mutate(x = trimws(x)) %>%
+  unique
+}
+
+
+
 #' Convert input in day-month-year format to date
 #' @param x Input variable
 #' @return Date variable of class Date
