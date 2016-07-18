@@ -738,6 +738,8 @@ transform_main <- reactive({
       return("Select one or more variables to gather")
     } else if (input$tr_change_type == 'expand') {
       return("Select one or more variables to expand")
+    } else if (input$tr_change_type == 'unnest') {
+      return("Select one variable to unnest")
     }
   }
 
