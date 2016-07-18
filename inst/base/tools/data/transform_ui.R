@@ -831,7 +831,7 @@ transform_main <- reactive({
 
  ## unnest
     if (input$tr_change_type == "unnest")
-      return(.unnest(dat, inp_vars("tr_vars"), store = FALSE))
+      return(.unnest(dat, input$tr_unnest, store = FALSE))
 
 
     ## expand grid
