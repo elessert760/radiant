@@ -465,13 +465,13 @@ observeEvent(input$tr_change_type, {
   }
 }
 
-.unnest <- function(dataset, vars,
+.unnest <- function(dataset, vars = input$tr_vars,
                     store_dat = "",
                     store = TRUE) {
 
   if (!store && !is.character(dataset)) {
-    dataset %>%
-    mutate(vars = strsplit(as.character(vars),
+    dataset %<>%
+    mutate(unnest = strsplit(as.character(vars),
                                     ',|;|:|<|\\(')) %>%
       unnest()
   } else {
