@@ -471,8 +471,7 @@ observeEvent(input$tr_change_type, {
 
   if (!store && !is.character(dataset)) {
     dataset %<>%
-    mutate_(unnest = strsplit(dataset[,var],
-                                    ',|;|:|<|\\(')) %>%
+    mutate_(var = strsplit(var, ',|;|:|<|\\(')) %>%
       unnest()
   } else {
     if (store_dat == "") store_dat <- dataset
