@@ -51,7 +51,7 @@ output$ui_tr_unnest <- renderUI({
   req(input$tr_change_type)
   vars <- varnames()
   tagList(
-    selectInput("tr_vars", "Variable:", choices  = vars, selected = "none", multiple = FALSE)
+    selectInput("tr_unnest", "Variable:", choices  = vars, selected = "none", multiple = FALSE)
   )
 })
 
@@ -465,13 +465,13 @@ observeEvent(input$tr_change_type, {
   }
 }
 
-.unnest <- function(dataset, vars,
+.unnest <- function(dataset, var,
                     store_dat = "",
                     store = TRUE) {
 
   if (!store && !is.character(dataset)) {
     dataset %<>%
-    mutate(unnest = strsplit(as.character(vars),
+    mutate(unnest = strsplit(as.character(var),
                                     ',|;|:|<|\\(')) %>%
       unnest()
   } else {
@@ -831,7 +831,7 @@ transform_main <- reactive({
 
  ## unnest
     if (input$tr_change_type == "unnest")
-      return(.unnest(dat, inp_vars("tr_vars"), store = FALSE))
+      return(.unnest(dat, input$tr_unnest, store = FALSE))
 
 
     ## expand grid
