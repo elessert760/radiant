@@ -51,7 +51,7 @@ output$ui_tr_unnest <- renderUI({
   req(input$tr_change_type)
   vars <- c("None" = "none", varnames())
   tagList(
-    selectInput("tr_unnest", "Variable:", choices  = vars, selected = "none", multiple = FALSE)
+    selectInput("tr_vars", "Variable:", choices  = vars, selected = "none", multiple = FALSE)
   )
 })
 
