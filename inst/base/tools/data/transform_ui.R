@@ -465,15 +465,14 @@ observeEvent(input$tr_change_type, {
   }
 }
 
-.unnest <- function(dataset, var,
+.unnest <- function(dataset, vars,
                     store_dat = "",
                     store = TRUE) {
   if (!store && !is.character(dataset)) {
 dataset %>%
-  mutate(var = strsplit(as.character(var),
+  mutate(vars = strsplit(vars,
                          ',|;|:|<|\\(')) %>%
-  unnest() %>% 
-  unique
+  unnest()
   } else {
     if (store_dat == "") store_dat <- dataset
     paste0("## Gather columns\nr_data[[\"",store_dat,"\"]] <- r_data[[\"",dataset,"\"]] %<>%  mutate(vars = strsplit(as.character(vars),
@@ -995,7 +994,7 @@ observeEvent(input$tr_store, {
     cmd <- .spread(input$dataset, key = input$tr_spread_key, value = input$tr_spread_value, input$tr_dataset)
     r_data[[dataset]] <- dat
   } else if (input$tr_change_type == 'unnest') {
-    cmd <- .unnest(input$dataset, var = input$tr_unnest, input$tr_dataset)
+    cmd <- .unnest(input$dataset, vars = input$tr_unnest, input$tr_dataset)
     r_data[[dataset]] <- dat
   }
   else if (input$tr_change_type == 'expand') {
