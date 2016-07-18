@@ -472,7 +472,7 @@ observeEvent(input$tr_change_type, {
   if (!store && !is.character(dataset)) {
     dataset %<>%
     mutate_(var = strsplit(var, ',|;|:|<|\\(')) %>%
-      unnest()
+      unnest_(data = ., unnest_cols = var)
   } else {
     if (store_dat == "") store_dat <- dataset
     paste0("## Gather columns\nr_data[[\"",store_dat,"\"]] <- r_data[[\"",dataset,"\"]] %<>%  mutate(vars = strsplit(as.character(vars),
