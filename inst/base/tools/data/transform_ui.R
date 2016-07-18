@@ -141,7 +141,10 @@ output$ui_tr_dataset <- renderUI({
     tr_dataset <- paste0(tr_dataset, "_spread")
   } else if (input$tr_change_type == "expand") {
     tr_dataset <- paste0(tr_dataset, "_expand")
+  } else if (input$tr_change_type == "unnest") {
+    tr_dataset <- paste0(tr_dataset, "_unnest")
   }
+  
   tags$table(
     tags$td(textInput("tr_dataset", "Store changes in:", tr_dataset)),
     tags$td(actionButton("tr_store", "Store"), style="padding-top:30px;")
