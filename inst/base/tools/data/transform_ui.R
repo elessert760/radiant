@@ -994,7 +994,7 @@ observeEvent(input$tr_store, {
     cmd <- .spread(input$dataset, key = input$tr_spread_key, value = input$tr_spread_value, input$tr_dataset)
     r_data[[dataset]] <- dat
   } else if (input$tr_change_type == 'unnest') {
-    cmd <- .unnest(input$dataset, var = input$tr_unnest, input$tr_dataset)
+    cmd <- .unnest(input$dataset, vars = input$tr_vars, input$tr_dataset)
     r_data[[dataset]] <- dat
   }
   else if (input$tr_change_type == 'expand') {
