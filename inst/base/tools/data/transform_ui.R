@@ -47,6 +47,14 @@ output$ui_tr_spread <- renderUI({
   )
 })
 
+output$ui_tr_unnest <- renderUI({
+  req(input$tr_change_type)
+  vars <- c("None" = "none", varnames())
+  tagList(
+    selectInput("tr_unnest", "Variable:", choices  = vars, selected = "none", multiple = FALSE)
+  )
+})
+
 output$ui_tr_reorg_vars <- renderUI({
   ## need a dependency to reset list of variables
   # if (is_empty(input$tr_change_type)) return()
@@ -170,7 +178,8 @@ trans_types <- list("None" = "none", "Type" = "type", "Transform" = "transform",
                     "Gather columns" = "gather",
                     "Spread column" = "spread",
                     "Table-to-data" = "tab2dat",
-                    "Expand grid" = "expand")
+                    "Expand grid" = "expand", 
+                    "Un-nest" = "unnest")
 
 
 output$ui_Transform <- renderUI({
@@ -193,6 +202,9 @@ output$ui_Transform <- renderUI({
     ),
     conditionalPanel(condition = "input.tr_change_type == 'gather'",
       uiOutput("ui_tr_gather")
+    ),
+     conditionalPanel(condition = "input.tr_change_type == 'unnest'",
+      uiOutput("ui_tr_unnest")
     ),
     conditionalPanel(condition = "input.tr_change_type == 'spread'",
       uiOutput("ui_tr_spread")
@@ -449,6 +461,23 @@ observeEvent(input$tr_change_type, {
     paste0("## Gather columns\nr_data[[\"",store_dat,"\"]] <- gather(r_data[[\"",dataset,"\"]], ", key, ", ", value, ", ", paste0(vars, collapse = ", "),", factor_key = TRUE)\n")
   }
 }
+
+.unnest <- function(dataset, vars,
+                    store_dat = "",
+                    store = TRUE) {
+
+  if (!store && !is.character(dataset)) {
+    mutate(vars = strsplit(as.character(vars),
+                                    ',|;|:|<|\\(')) %>%
+      unnest(vars)
+  } else {
+    if (store_dat == "") store_dat <- dataset
+    paste0("## Gather columns\nr_data[[\"",store_dat,"\"]] <- r_data[[\"",dataset,"\"]] %>%  mutate(vars = strsplit(as.character(vars),
+                                    ',|;|:|<|\\(')) %>% \n unnest(vars)\n")
+  }
+}
+
+
 
 .spread <- function(dataset, key, value,
                     store_dat = "",
@@ -796,6 +825,11 @@ transform_main <- reactive({
     if (input$tr_change_type == "remove_dup")
       return(.remove_dup(dat, inp_vars("tr_vars"), store = FALSE))
 
+ ## unnest
+    if (input$tr_change_type == "unnest")
+      return(.unnest(dat, inp_vars("tr_vars"), store = FALSE))
+
+
     ## expand grid
     if (input$tr_change_type == "expand")
       return(.expand(dat, inp_vars("tr_vars"), store = FALSE))
@@ -956,7 +990,11 @@ observeEvent(input$tr_store, {
   } else if (input$tr_change_type == 'spread') {
     cmd <- .spread(input$dataset, key = input$tr_spread_key, value = input$tr_spread_value, input$tr_dataset)
     r_data[[dataset]] <- dat
-  } else if (input$tr_change_type == 'expand') {
+  } else if (input$tr_change_type == 'spread') {
+    cmd <- .unnest(input$dataset, var = input$tr_unnest, input$tr_dataset)
+    r_data[[dataset]] <- dat
+  }
+  else if (input$tr_change_type == 'expand') {
     cmd <- .expand(input$dataset, vars = input$tr_vars, input$tr_dataset)
     r_data[[dataset]] <- dat
   } else if (input$tr_change_type == 'reorg_vars') {
@@ -1020,6 +1058,7 @@ observeEvent(input$tr_change_type, {
 	updateSelectInput(session = session, inputId = "tr_transfunction", selected = "none")
   updateSelectInput(session = session, inputId = "tr_replace", selected = "None")
   updateSelectInput(session = session, inputId = "tr_normalizer", selected = "none")
+  updateSelectInput(session = session, inputId = "tr_unnest", selected = "none")
   updateSelectInput(session = session, inputId = "tr_tab2dat", selected = "none")
 })
 
