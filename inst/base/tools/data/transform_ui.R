@@ -49,7 +49,7 @@ output$ui_tr_spread <- renderUI({
 
 output$ui_tr_unnest <- renderUI({
   req(input$tr_change_type)
-  vars <- c("None" = "none", varnames())
+  vars <- varnames()
   tagList(
     selectInput("tr_vars", "Variable:", choices  = vars, selected = "none", multiple = FALSE)
   )
@@ -465,7 +465,7 @@ observeEvent(input$tr_change_type, {
   }
 }
 
-.unnest <- function(dataset, vars = input$tr_vars,
+.unnest <- function(dataset, vars,
                     store_dat = "",
                     store = TRUE) {
 
@@ -476,12 +476,10 @@ observeEvent(input$tr_change_type, {
       unnest()
   } else {
     if (store_dat == "") store_dat <- dataset
-    paste0("## Gather columns\nr_data[[\"",store_dat,"\"]] <- r_data[[\"",dataset,"\"]] %>%  mutate(vars = strsplit(as.character(vars),
-                                    ',|;|:|<|\\(')) %>% \n unnest(vars)\n")
+    paste0("## Gather columns\nr_data[[\"",store_dat,"\"]] <- r_data[[\"",dataset,"\"]] %<>%  mutate(vars = strsplit(as.character(vars),
+                                    ',|;|:|<|\\(')) %>% \n unnest()\n")
   }
 }
-
-
 
 .spread <- function(dataset, key, value,
                     store_dat = "",
