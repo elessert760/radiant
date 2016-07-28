@@ -58,14 +58,15 @@ as_mdy <- function(x) { if (is.factor(x)) as.character(x) else x } %>%
 #' @param x input column
 #' @export
 
-split_cell <- function(x) {
-x %<>%
-  mutate(x = gsub("@ ", "@", x = x)) %>%
-  mutate(x = gsub("'", "", x = x)) %>%
-  mutate(x = gsub("\\?|>)", ",", x = x)) %>%
-  mutate(x = gsub("|", ",", x = x, fixed = T)) %>% 
-  mutate(x = gsub(" com", "com", x = x)) %>%
-  mutate(x = gsub(",com", ".com", x = x)) %>%
+split_cell <- function(x) { if (is.factor(x)) as.character(x) else x } 
+{
+x <- x %>%
+  mutate(x = gsub("@ ", "@", x = .)) %>%
+  mutate(x = gsub("'", "", x = .)) %>%
+  mutate(x = gsub("\\?|>)", ",", x = .)) %>%
+  mutate(x = gsub("|", ",", x = ., fixed = T)) %>% 
+  mutate(x = gsub(" com", "com", x = .)) %>%
+  mutate(x = gsub(",com", ".com", x = .)) %>%
   mutate(x = trimws(x)) %>%
   mutate(x = strsplit(as.character(x),
                                 ",|;|:|<|\\(")) %>%
