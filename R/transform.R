@@ -58,7 +58,7 @@ as_mdy <- function(x) { if (is.factor(x)) as.character(x) else x } %>%
 #' @param x input column
 #' @export
 
-split_cell <- function(x) { if (is.factor(x)) as.character(x) else x } 
+split_cell <- function(x) { if (is.factor(x)) as.character(x) else x } %>%
 {
 x <- x %>%
   mutate(x = gsub("@ ", "@", x = .)) %>%
