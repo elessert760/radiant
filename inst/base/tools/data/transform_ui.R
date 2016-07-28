@@ -465,7 +465,7 @@ observeEvent(input$tr_change_type, {
   }
 }
 
-.unnest <- function(dataset, x,  vars,
+.unnest <- function(dataset, vars, x, 
                     store_dat = "",
                     store = TRUE) {
   if (!store && !is.character(dataset)) {
@@ -830,7 +830,7 @@ transform_main <- reactive({
 
  ## unnest
     if (input$tr_change_type == "unnest")
-      return(.unnest(dat, inp_vars("tr_unnest"), store = FALSE))
+      return(.unnest(dat, inp_vars("tr_vars"), x = input$tr_unnest, store = FALSE))
 
 
     ## expand grid
